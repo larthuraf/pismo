@@ -15,7 +15,7 @@ Using compiled jar on bin/
 java -jar pismo-1.0.jar
 ```
 
-Using the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
+Using the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) :
 
 ```shell
 mvn spring-boot:run
