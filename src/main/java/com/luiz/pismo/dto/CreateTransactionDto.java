@@ -13,6 +13,14 @@ public class CreateTransactionDto {
     @JsonProperty()
     private double amount;
 
+    public CreateTransactionDto(long accountId, int operationTypeId, double amount) {
+        this.accountId = accountId;
+        this.operationTypeId = operationTypeId;
+        this.amount = amount;
+    }
+
+    public CreateTransactionDto() {
+    }
 
     public long getAccountId() {
         return accountId;
@@ -35,7 +43,4 @@ public class CreateTransactionDto {
                 '}';
     }
 
-    public boolean isValid() {
-        return true;
-    }
 }

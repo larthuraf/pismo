@@ -14,4 +14,13 @@ public class AccountDto {
         this.accountId = accountId;
         this.documentNumber = documentNumber;
     }
+
+
+    public long getAccountId() {
+        return accountId;
+    }
+
+    public String getDocumentNumber() {
+        return documentNumber;
+    }
 }

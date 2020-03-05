@@ -62,4 +62,9 @@ public class OperationType {
     public int hashCode() {
         return Objects.hash(operationTypeId);
     }
+
+
+    public double convertAmount(double amount) {
+        return negative ? Math.abs(amount)*-1 : Math.abs(amount);
+    }
 }

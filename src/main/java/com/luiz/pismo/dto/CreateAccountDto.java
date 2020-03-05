@@ -14,4 +14,11 @@ public class CreateAccountDto {
     public boolean isValid() {
         return documentNumber != null && !documentNumber.isEmpty();
     }
+
+    public CreateAccountDto(String documentNumber) {
+        this.documentNumber = documentNumber;
+    }
+
+    public CreateAccountDto() {
+    }
 }

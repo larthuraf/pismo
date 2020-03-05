@@ -39,7 +39,7 @@ public class AccountService {
     }
 
 
-    public void createAccount(CreateAccountDto accountDto) {
+    public long createAccount(CreateAccountDto accountDto) {
         if (!accountDto.isValid())
             throw new InvalidDocumentNumberException("Invalid Document Number " + accountDto.getDocumentNumber());
 
@@ -49,8 +49,8 @@ public class AccountService {
         Account account = new Account(accountDto.getDocumentNumber());
         accountRepository.save(account);
         System.out.println("Created account " + account);
+        return account.getAccountId();
     }
-
 
 
     public AccountDto fetchAccount(long accountId) {
@@ -59,21 +59,17 @@ public class AccountService {
         return new AccountDto(account.getAccountId(), account.getDocumentNumber());
     }
 
-
-
-    public void createTransaction(CreateTransactionDto transactionDto) {
+    public long createTransaction(CreateTransactionDto transactionDto) {
         OperationType operationType = typeRepository.findById(transactionDto.getOperationTypeId())
                 .orElseThrow(()-> new InvalidTransactionException("Invalid Operation Type"));
 
         Account account = accountRepository.findById(transactionDto.getAccountId())
                 .orElseThrow(()-> new InvalidTransactionException("Invalid Account Id"));
 
-        double amount = Math.abs(transactionDto.getAmount());
-        if (operationType.isNegative()) amount *= -1;
+        Transaction transaction = new Transaction(account, operationType, operationType.convertAmount(transactionDto.getAmount()), new Date());
 
-        Transaction transaction = new Transaction(account, operationType, amount, new Date());
         transactionRepository.save(transaction);
         System.out.println("Created transaction " + transaction);
-
+        return transaction.getTransactionId();
     }
 }
