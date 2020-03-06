@@ -17,13 +17,16 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Service
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class AccountService {
 
+    private static final double DEFAULT_INITIAL_CREDIT = 5000;
     private final OperationTypeRepository typeRepository;
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
@@ -46,7 +49,7 @@ public class AccountService {
         if (accountRepository.existsByDocumentNumber(accountDto.getDocumentNumber()))
             throw new InvalidDocumentNumberException("Cannot create account for Document Number " + accountDto.getDocumentNumber());
 
-        Account account = new Account(accountDto.getDocumentNumber());
+        Account account = new Account(accountDto.getDocumentNumber(), DEFAULT_INITIAL_CREDIT);
         accountRepository.save(account);
         System.out.println("Created account " + account);
         return account.getAccountId();
@@ -56,7 +59,7 @@ public class AccountService {
     public AccountDto fetchAccount(long accountId) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException("Account Id " + accountId + " not found!"));
-        return new AccountDto(account.getAccountId(), account.getDocumentNumber());
+        return new AccountDto(account.getAccountId(), account.getDocumentNumber(), account.getAvailableCreditLimit());
     }
 
     public long createTransaction(CreateTransactionDto transactionDto) {
@@ -66,10 +69,26 @@ public class AccountService {
         Account account = accountRepository.findById(transactionDto.getAccountId())
                 .orElseThrow(()-> new InvalidTransactionException("Invalid Account Id"));
 
-        Transaction transaction = new Transaction(account, operationType, operationType.convertAmount(transactionDto.getAmount()), new Date());
+        double amount = transactionDto.getAmount() * operationType.defineOperationSign();
+
+        double newLimit = account.getAvailableCreditLimit() + amount;
+
+        if (newLimit < 0) throw new InvalidTransactionException("Available limit not enough for transaction amount");
+
+        account.setAvailableCreditLimit(newLimit);
+        accountRepository.save(account);
+
+        double balance = applyTransactionMount(amount, operationType, account);
+
+        Transaction transaction = new Transaction(account, operationType, amount, new Date(), balance);
 
         transactionRepository.save(transaction);
         System.out.println("Created transaction " + transaction);
         return transaction.getTransactionId();
+    }
+
+    private double applyTransactionMount(double balance, OperationType operationType, Account account) {
+        //TODO get list of transactions by account id and apply amount based on operation type.
+        return balance;
     }
 }

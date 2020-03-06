@@ -26,19 +26,24 @@ public class Transaction {
     @Column(name = "event_date", updatable = false, nullable = false)
     private Date eventDate;
 
-    public Transaction(long transactionId, Account account, OperationType operationType, double amount, Date eventDate) {
+    @Column(updatable = true, nullable = false)
+    private double balance;
+
+    public Transaction(long transactionId, Account account, OperationType operationType, double amount, Date eventDate, double balance) {
         this.transactionId = transactionId;
         this.account = account;
         this.operationType = operationType;
         this.amount = amount;
         this.eventDate = eventDate;
+        this.balance = balance;
     }
 
-    public Transaction(Account account, OperationType operationType, double amount, Date eventDate) {
+    public Transaction(Account account, OperationType operationType, double amount, Date eventDate, double balance) {
         this.account = account;
         this.operationType = operationType;
         this.amount = amount;
         this.eventDate = eventDate;
+        this.balance = balance;
     }
 
     public Transaction() {
@@ -60,6 +65,18 @@ public class Transaction {
         return amount;
     }
 
+    public Date getEventDate() {
+        return eventDate;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
     @Override
     public String toString() {
         return "Transaction{" +
@@ -68,6 +85,7 @@ public class Transaction {
                 ", operationType=" + operationType +
                 ", amount=" + amount +
                 ", eventDate=" + eventDate +
+                ", balance=" + balance +
                 '}';
     }
 }
