@@ -81,6 +81,20 @@ class AccountServiceTest {
     }
 
     @Test
+    void createTransactionWithNegativeOperationAndSufficientLimit() {
+        long accountId = service.createAccount(new CreateAccountDto("12345678906"));
+        long transactionId = service.createTransaction(new CreateTransactionDto(accountId, 1, 50));
+        assertTrue(transactionId > 0);
+    }
+
+    @Test
+    void createTransactionWithNegativeOperationAndInSufficientLimit() {
+        long accountId = service.createAccount(new CreateAccountDto("12345678907"));
+        assertThrows(InvalidTransactionException.class,
+                () -> service.createTransaction(new CreateTransactionDto(accountId, 1, 6000)));
+    }
+
+    @Test
     void createTransactionWithNotExistingAccountIdShouldThrowError() {
         assertThrows(InvalidTransactionException.class,
                 ()-> service.createTransaction(new CreateTransactionDto(0, 1, 75.84)));

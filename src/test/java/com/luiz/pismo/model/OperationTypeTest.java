@@ -20,13 +20,15 @@ class OperationTypeTest {
     void convertAmountWithPositiveOperationType() {
         OperationType operationType = new OperationType(0, "POSITIVE", false);
         double amount = 15.5;
-        assertEquals(operationType.convertAmount(amount), amount, 0.0);
+        double signedAmount = amount * operationType.defineOperationSign();
+        assertEquals(signedAmount, amount, 0.0);
     }
 
     @Test
     void convertAmountWithNegativeOperationType() {
         OperationType operationType = new OperationType(0, "NEGATIVE", true);
         double amount = 15.5;
-        assertEquals(operationType.convertAmount(amount), -amount, 0.0);
+        double signedAmount = amount * operationType.defineOperationSign();
+        assertEquals(signedAmount, -amount, 0.0);
     }
 }

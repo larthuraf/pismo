@@ -1,7 +1,6 @@
 package com.luiz.pismo.model;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "accounts")
@@ -15,14 +14,19 @@ public class Account {
     @Column(name = "document_number", updatable = false, nullable = false, unique = true)
     private String documentNumber;
 
+    @Column(name = "available_credit_limit", updatable = true, nullable =  false)
+    private double availableCreditLimit;
 
-    public Account(long accountId, String documentNumber) {
+
+    public Account(long accountId, String documentNumber, double availableCreditLimit) {
         this.accountId = accountId;
         this.documentNumber = documentNumber;
+        this.availableCreditLimit = availableCreditLimit;
     }
 
-    public Account(String documentNumber) {
+    public Account(String documentNumber, double availableCreditLimit) {
         this.documentNumber = documentNumber;
+        this.availableCreditLimit = availableCreditLimit;
     }
 
     public Account() {
@@ -36,11 +40,20 @@ public class Account {
         return documentNumber;
     }
 
+    public double getAvailableCreditLimit() {
+        return availableCreditLimit;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
                 "accountId=" + accountId +
-                ", documentNumber=" + documentNumber +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", availableCreditLimit=" + availableCreditLimit +
                 '}';
+    }
+
+    public void setAvailableCreditLimit(double availableCreditLimit) {
+        this.availableCreditLimit = availableCreditLimit;
     }
 }

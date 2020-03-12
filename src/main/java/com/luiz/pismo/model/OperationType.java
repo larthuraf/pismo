@@ -64,7 +64,7 @@ public class OperationType {
     }
 
 
-    public double convertAmount(double amount) {
-        return negative ? Math.abs(amount)*-1 : Math.abs(amount);
+    public double defineOperationSign() {
+        return negative ? -1 : 1;
     }
 }

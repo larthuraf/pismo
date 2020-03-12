@@ -10,9 +10,13 @@ public class AccountDto {
     @JsonProperty("document_number")
     private final String documentNumber;
 
-    public AccountDto(long accountId, String documentNumber) {
+    @JsonProperty("available_credit_limit")
+    private final double availableCreditLimit;
+
+    public AccountDto(long accountId, String documentNumber, double availableCreditLimit) {
         this.accountId = accountId;
         this.documentNumber = documentNumber;
+        this.availableCreditLimit = availableCreditLimit;
     }
 
 
@@ -22,5 +26,9 @@ public class AccountDto {
 
     public String getDocumentNumber() {
         return documentNumber;
+    }
+
+    public double getAvailableCreditLimit() {
+        return availableCreditLimit;
     }
 }
